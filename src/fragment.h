@@ -8,16 +8,11 @@ struct FragColor {
     double z;     // Valor de profundidad (en lugar del z-buffer)
 };
 
-// La estructura Fragment ahora se usa solo para representar la entrada del shader de fragmentos.
+
 struct Fragment {
-    void setColor(const Color& newColor) {
-        color = newColor;
-    }
-    uint16_t x;          // Coordenada x del fragmento
-    uint16_t y;          // Coordenada y del fragmento
-    double z;
+    glm::ivec2 position; // X and Y coordinates of the pixel (in screen space)
     Color color;
-    float intensity;     // Intensidad de la luz del fragmento (si se usa)
-    glm::vec3 worldPos;
-    glm::vec3 originalPos;
+    float z;
+    glm::vec3 original;
+    // Other interpolated attributes (e.g., color, texture coordinates, normals) can be added here
 };

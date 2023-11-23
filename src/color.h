@@ -1,40 +1,37 @@
 #pragma once
-#include <iostream>
+#include <SDL2/SDL.h>
 #include <algorithm>
+#include <iostream>
 
-class Color {
-public:
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-    uint8_t a;
+struct Color {
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+    Uint8 a;
 
-    Color() : r(0), g(0), b(0), a(0) {}
-    Color(uint8_t red, uint8_t green, uint8_t blue) : r(clamp(red)), g(clamp(green)), b(clamp(blue)) {}
+    Color(Uint8 red = 0, Uint8 green = 0, Uint8 blue = 0, Uint8 alpha = 255)
+            : r(red), g(green), b(blue), a(alpha) {}
 
+    // Overload the + operator to add colors
     Color operator+(const Color& other) const {
         return Color(
-            static_cast<uint8_t>(clamp(static_cast<int>(r) + other.r)),
-            static_cast<uint8_t>(clamp(static_cast<int>(g) + other.g)),
-            static_cast<uint8_t>(clamp(static_cast<int>(b) + other.b))
+                std::min(255, int(r) + int(other.r)),
+                std::min(255, int(g) + int(other.g)),
+                std::min(255, int(b) + int(other.b)),
+                std::min(255, int(a) + int(other.a))
         );
     }
 
-    Color operator*(float scalar) const {
+    // Overload the * operator to scale colors by a factor
+    Color operator*(float factor) const {
         return Color(
-            static_cast<uint8_t>(clamp(static_cast<int>(r * scalar))),
-            static_cast<uint8_t>(clamp(static_cast<int>(g * scalar))),
-            static_cast<uint8_t>(clamp(static_cast<int>(b * scalar)))
+                std::clamp(static_cast<Uint8>(r * factor), Uint8(0), Uint8(255)),
+                std::clamp(static_cast<Uint8>(g * factor), Uint8(0), Uint8(255)),
+                std::clamp(static_cast<Uint8>(b * factor), Uint8(0), Uint8(255)),
+                std::clamp(static_cast<Uint8>(a * factor), Uint8(0), Uint8(255))
         );
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Color& color) {
-        os << "RGB: (" << static_cast<int>(color.r) << ", " << static_cast<int>(color.g) << ", " << static_cast<int>(color.b) << ")";
-        return os;
-    }
-
-private:
-    static uint8_t clamp(int value) {
-        return static_cast<uint8_t>(std::clamp(value, 0, 255));
-    }
+    // Friend function to allow float * Color
+    friend Color operator*(float factor, const Color& color);
 };
