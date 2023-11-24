@@ -204,3 +204,35 @@ Color mystery(Fragment& fragment) {
     fragment.color = mys1 * (1.0f - gradient) + mys2 * gradient * zoom;
     return fragment.color;
 }
+
+Color navecita(Fragment& fragment) {
+    Color shipColor(255, 0, 0);
+
+    fragment.color = shipColor;
+    return fragment.color;
+}
+
+Color skybox(Fragment& fragment) {
+
+    FastNoiseLite noise;
+    glm::vec2 fragmentCoords(fragment.original.x, fragment.original.y);
+    float scale = 100000.0f;
+
+    if (true) {
+        float noiseValue = noise.GetNoise(fragmentCoords.x * scale, fragmentCoords.y * scale);
+        float brightnessThreshold = 0.9f;
+
+        if (noiseValue > brightnessThreshold) {
+            Color starColor(100, 100, 100);
+            int o = rand() % 100;
+            starColor.r += o;
+            starColor.g += o;
+            starColor.b += o;
+            fragment.color = starColor;
+
+            return fragment.color;
+        }
+    }
+
+    return fragment.color;
+}

@@ -16,8 +16,8 @@
 #include "ObjLoader.h"
 #include "shaders.h"
 
-const int WINDOW_WIDTH = 400;
-const int WINDOW_HEIGHT = 400;
+const int WINDOW_WIDTH = 500;
+const int WINDOW_HEIGHT = 500;
 
 Uint32 frameStart;
 Uint32 frameTime;
@@ -28,7 +28,7 @@ SDL_Renderer* renderer;
 std::array<double, WINDOW_WIDTH * WINDOW_HEIGHT> zbuffer;
 
 enum ShaderId {
-    gasPlanet, orbitalPlanet, misteryPlanet, star, rocoso, earth
+    gasPlanet, orbitalPlanet, misteryPlanet, star, rocoso, earth, skyboxS, spaceship
 };
 
 struct Model {
@@ -46,6 +46,13 @@ Color colorC(0, 24, 255, 255); // Blue color
 glm::vec3 L = glm::vec3(0, 0, 200.0f); // Dirección de la luz en el espacio del ojo
 
 Uniforms uniforms;
+Uniforms uniforms2;
+Uniforms uniforms3;
+Uniforms uniforms4;
+Uniforms uniforms5;
+Uniforms uniforms6;
+Uniforms uniforms7;
+Uniforms uniforms8;
 
 Color interpolateColor(const glm::vec3& barycentricCoord, const Color& colorA, const Color& colorB, const Color& colorC) {
     float u = barycentricCoord.x;
@@ -139,6 +146,14 @@ void render(const std::vector<Vertex>& vertexArray, const Uniforms& uniform, int
                         // Draw the fragment using SDL_SetRenderDrawColor and SDL_RenderDrawPoint
                         //std::cout << "El valor de i es: " << id << std::endl;
                         switch (id) {
+                            case skyboxS:
+                                fragmentS = skybox(fragment);
+                                SDL_SetRenderDrawColor(renderer, fragmentS.r, fragmentS.g,fragmentS.b, fragmentS.a);
+                                break;
+                            case spaceship:
+                                fragmentS = navecita(fragment);
+                                SDL_SetRenderDrawColor(renderer, fragmentS.r, fragmentS.g,fragmentS.b, fragmentS.a);
+                                break;
                             case gasPlanet:
                                 fragmentS = gasPlanet1(fragment);
                                 SDL_SetRenderDrawColor(renderer, fragmentS.r, fragmentS.g,fragmentS.b, fragmentS.a);
