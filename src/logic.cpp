@@ -220,19 +220,10 @@ glm::mat4 createModelMatrixEntity(glm::vec3 matrixTranslation, glm::vec3 matrixS
     return translation * scale * rotation;
 }
 
-glm::mat4 createModelMatrixEntityWithMoon(const glm::mat4& modelMatrix3) {
-    // Aquí defines la transformación del "modelo 4" en relación con el "modelo 3"
-    glm::mat4 translation = glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.3f, 0.0f));
-    glm::mat4 scale = glm::scale(glm::mat4(1), glm::vec3(0.2f, 0.2f, 0.2f));
-    glm::mat4 rotation = glm::rotate(glm::mat4(1), glm::radians((a++) * 4), glm::vec3(0.0f, 1.0f, 0.0f));
-    // Aplica la transformación del "modelo 4" en relación con el "modelo 3"
-    return modelMatrix3 * translation * scale * rotation;
-}
-
-glm::mat4 createModelMatrix6(glm::vec3 cameraPosition3, glm::vec3 targetPosition3,glm::vec3 upVector3, float xRotate, float yRotate) {
-    glm::mat4 translation = glm::translate(glm::mat4(1), (targetPosition3 - cameraPosition3) /7.0f + cameraPosition3 +upVector3*0.15f);
-    glm::mat4 scale = glm::scale(glm::mat4(1), glm::vec3(0.3f, 0.3f, 0.3f));
-    glm::mat4 rotationX = glm::rotate(glm::mat4(1), glm::radians(xRotate), glm::vec3(0.0f, 1.0f, 0.0f));
-    //glm::mat4 rotationY = glm::rotate(glm::mat4(1), glm::radians((yRotate)+90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    return translation * scale * rotationX;
+glm::mat4 createModelMatrixSpaceship(glm::vec3 cameraPosition, glm::vec3 targetPosition,glm::vec3 upVector, float xRotate, float yRotate) {
+    glm::mat4 translation = glm::translate(glm::mat4(1), (targetPosition - cameraPosition) / 7.0f + cameraPosition - upVector *0.15f);
+    glm::mat4 scale = glm::scale(glm::mat4(1), glm::vec3(0.1f, 0.1f, 0.1f));
+    glm::mat4 rotationX = glm::rotate(glm::mat4(1), glm::radians(-xRotate - 90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 rotationY = glm::rotate(glm::mat4(1), glm::radians(-yRotate), glm::vec3(0.0f, 0.0f, 1.0f));
+    return translation * scale * rotationX * rotationY;
 }

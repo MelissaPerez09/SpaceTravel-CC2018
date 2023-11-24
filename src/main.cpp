@@ -62,6 +62,8 @@ int main(int argc, char* argv[]) {
 
     float moveSpeed = 0.1f;
     float moveSpeed2 = 0.05f;
+    float moveSpeedBackForward = 0.1f;
+    float moveSpeedLeftRight = 0.05f;
     float xRotate = 1;
     float yRotate = 1;
 
@@ -74,16 +76,13 @@ int main(int argc, char* argv[]) {
                 switch (event.key.keysym.sym) {
                     case SDLK_w:
                         // Mueve la cámara hacia adelante
-                        cameraPosition -= moveSpeed * glm::normalize(targetPosition - cameraPosition);
-                        cameraPosition2 -= moveSpeed * glm::normalize(targetPosition - cameraPosition);
-                        targetPosition -=  moveSpeed * (targetPosition - cameraPosition);
+                        cameraPosition -= moveSpeedBackForward * glm::normalize(targetPosition - cameraPosition);
+                        targetPosition -= moveSpeedBackForward * (targetPosition - cameraPosition);
                         break;
                     case SDLK_s:
                         // Mueve la cámara hacia atrás
-                        cameraPosition += moveSpeed * glm::normalize(targetPosition - cameraPosition);
-                        cameraPosition2 += moveSpeed * glm::normalize(targetPosition - cameraPosition);
-                        targetPosition += moveSpeed * (targetPosition - cameraPosition);
-                        targetPosition3 +=  moveSpeed * (targetPosition - cameraPosition);
+                        cameraPosition += moveSpeedBackForward * glm::normalize(targetPosition - cameraPosition);
+                        targetPosition += moveSpeedBackForward * (targetPosition - cameraPosition);
                         break;
                     case SDLK_a:
                         // Mover hacia la izquierda
@@ -149,7 +148,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model);
 
         //SUN
-        uniforms2.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(0.0f, 1.0f, 0.0f), 1);
+        uniforms2.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(0.0f, 1.0f, 0.0f), 0.5);
         uniforms2.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms2.viewport = createViewportMatrix();
         uniforms2.projection = createProjectionMatrix();
@@ -159,7 +158,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model2);
 
         //ROCOSO
-        uniforms3.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.0f, 1.0f, 0.0f), 0.4) * translationMatrix;
+        uniforms3.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix;
         uniforms3.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms3.viewport = createViewportMatrix();
         uniforms3.projection = createProjectionMatrix();
@@ -169,7 +168,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model3);
 
         //EARTH
-        uniforms4.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 1.0f, 0.0f), 0.4) * translationMatrix;
+        uniforms4.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix;
         uniforms4.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms4.viewport = createViewportMatrix();
         uniforms4.projection = createProjectionMatrix();
@@ -179,7 +178,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model4);
 
         //MISTERY PLANET
-        uniforms5.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f),glm::vec3(0.0f, 1.0f, 0.0f), 0.4) * translationMatrix;
+        uniforms5.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f),glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix;
         uniforms5.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms5.viewport = createViewportMatrix();
         uniforms5.projection = createProjectionMatrix();
@@ -189,7 +188,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model5);
 
         //GAS PLANET
-        uniforms6.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f),glm::vec3(0.0f, 1.0f, 0.0f), 0.4) * translationMatrix2;
+        uniforms6.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f),glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix2;
         uniforms6.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms6.viewport = createViewportMatrix();
         uniforms6.projection = createProjectionMatrix();
@@ -199,7 +198,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model6);
 
         //ORBITAL PLANET
-        uniforms7.model = createModelMatrixEntity(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.6f, 0.6f, 0.6f),glm::vec3(0.0f, 1.0f, 0.0f), 0.4) * translationMatrix2;
+        uniforms7.model = createModelMatrixEntity(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.6f, 0.6f, 0.6f),glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix2;
         uniforms7.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms7.viewport = createViewportMatrix();
         uniforms7.projection = createProjectionMatrix();
@@ -207,6 +206,16 @@ int main(int argc, char* argv[]) {
         model7.vertices = vertexArray;
         model7.i = orbitalPlanet;
         models.push_back(model7);
+
+        //SPACESHIP
+        uniforms8.model = createModelMatrixSpaceship(cameraPosition, targetPosition, upVector, xRotate, yRotate);
+        uniforms8.view = glm::lookAt(cameraPosition, targetPosition, upVector);
+        uniforms8.viewport = createViewportMatrix();
+        uniforms8.projection = createProjectionMatrix();
+        model8.uniforms = uniforms8;
+        model8.vertices = vertexArray2;
+        model8.i = spaceship;
+        models.push_back(model8);
 
         SDL_SetRenderDrawColor(renderer, clearColor.r, clearColor.g, clearColor.b, clearColor.a);
         SDL_RenderClear(renderer);

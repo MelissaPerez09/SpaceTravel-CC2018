@@ -206,7 +206,7 @@ Color mystery(Fragment& fragment) {
 }
 
 Color navecita(Fragment& fragment) {
-    Color shipColor(255, 0, 0);
+    Color shipColor(184, 179, 165);
 
     fragment.color = shipColor;
     return fragment.color;
