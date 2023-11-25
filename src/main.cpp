@@ -62,8 +62,7 @@ int main(int argc, char* argv[]) {
 
     float moveSpeed = 0.1f;
     float moveSpeed2 = 0.05f;
-    float moveSpeedBackForward = 0.1f;
-    float moveSpeedLeftRight = 0.05f;
+    float zoomLevel = 1.0f;
     float xRotate = 1;
     float yRotate = 1;
 
@@ -74,16 +73,6 @@ int main(int argc, char* argv[]) {
             } else if (event.type == SDL_KEYDOWN) {
                 // Maneja las teclas presionadas
                 switch (event.key.keysym.sym) {
-                    case SDLK_w:
-                        // Mueve la cámara hacia adelante
-                        cameraPosition -= moveSpeedBackForward * glm::normalize(targetPosition - cameraPosition);
-                        targetPosition -= moveSpeedBackForward * (targetPosition - cameraPosition);
-                        break;
-                    case SDLK_s:
-                        // Mueve la cámara hacia atrás
-                        cameraPosition += moveSpeedBackForward * glm::normalize(targetPosition - cameraPosition);
-                        targetPosition += moveSpeedBackForward * (targetPosition - cameraPosition);
-                        break;
                     case SDLK_a:
                         // Mover hacia la izquierda
                         cameraPosition += moveSpeed2 * glm::normalize(glm::cross((targetPosition - cameraPosition), upVector3))*5.0f;
@@ -110,10 +99,22 @@ int main(int argc, char* argv[]) {
                     case SDLK_DOWN:
                         yRotate += 10.0f;
                         break;
-
                 }
-            }
+            } else if (event.type == SDL_MOUSEWHEEL) {
+                // Zoom in or out based on the scroll direction
+                if (event.wheel.y > 0) {
+                    zoomLevel += 0.1f; // Increase zoom level for zooming in
+                } else if (event.wheel.y < 0) {
+                    zoomLevel -= 0.1f; // Decrease zoom level for zooming out
+                }
 
+                // Ensure zoom level is within reasonable bounds
+                zoomLevel = glm::clamp(zoomLevel, 0.1f, 2.0f);
+
+                // Update camera position based on zoom level
+                cameraPosition *= zoomLevel;
+                targetPosition *= zoomLevel;
+            }
         }
         targetPosition = glm::vec3(5.0f * sin(glm::radians(xRotate)) * cos(glm::radians(yRotate)), 5.0f * sin(glm::radians(yRotate)), -5.0f * cos(glm::radians(xRotate)) * cos(glm::radians(yRotate))) + cameraPosition;
         targetPosition3 = glm::vec3(5.0f * sin(glm::radians(xRotate)) * cos(glm::radians(yRotate)), 5.0f * sin(glm::radians(yRotate)), -5.0f * cos(glm::radians(xRotate)) * cos(glm::radians(yRotate))) + cameraPosition2;
@@ -148,7 +149,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model);
 
         //SUN
-        uniforms2.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(0.0f, 1.0f, 0.0f), 0.5);
+        uniforms2.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.5f, 1.5f, 1.5f) * zoomLevel, glm::vec3(0.0f, 1.0f, 0.0f), 0.5);
         uniforms2.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms2.viewport = createViewportMatrix();
         uniforms2.projection = createProjectionMatrix();
@@ -158,7 +159,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model2);
 
         //ROCOSO
-        uniforms3.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.3f, 0.3f, 0.3f), glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix;
+        uniforms3.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.3f, 0.3f, 0.3f) * zoomLevel, glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix;
         uniforms3.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms3.viewport = createViewportMatrix();
         uniforms3.projection = createProjectionMatrix();
@@ -168,7 +169,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model3);
 
         //EARTH
-        uniforms4.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix;
+        uniforms4.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f) * zoomLevel, glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix;
         uniforms4.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms4.viewport = createViewportMatrix();
         uniforms4.projection = createProjectionMatrix();
@@ -178,7 +179,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model4);
 
         //MISTERY PLANET
-        uniforms5.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f),glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix;
+        uniforms5.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f) * zoomLevel,glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix;
         uniforms5.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms5.viewport = createViewportMatrix();
         uniforms5.projection = createProjectionMatrix();
@@ -188,7 +189,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model5);
 
         //GAS PLANET
-        uniforms6.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f),glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix2;
+        uniforms6.model = createModelMatrixEntity(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f) * zoomLevel,glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix2;
         uniforms6.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms6.viewport = createViewportMatrix();
         uniforms6.projection = createProjectionMatrix();
@@ -198,7 +199,7 @@ int main(int argc, char* argv[]) {
         models.push_back(model6);
 
         //ORBITAL PLANET
-        uniforms7.model = createModelMatrixEntity(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.6f, 0.6f, 0.6f),glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix2;
+        uniforms7.model = createModelMatrixEntity(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.6f, 0.6f, 0.6f) * zoomLevel,glm::vec3(0.0f, 1.0f, 0.0f), 0.1) * translationMatrix2;
         uniforms7.view = glm::lookAt(cameraPosition2, targetPosition3, upVector3);
         uniforms7.viewport = createViewportMatrix();
         uniforms7.projection = createProjectionMatrix();
